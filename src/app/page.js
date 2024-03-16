@@ -1,3 +1,4 @@
+import Categories from "@/components/categories/categories";
 import Sidebar from "@/components/sidebar/sidebar";
 import Image from "next/image";
 
@@ -7,7 +8,9 @@ export default function Home() {
       <div>
         <Sidebar />
       </div>
-      <div>lorem</div>
+      <div>
+        <Categories />
+      </div>
       <div>3</div>
     </div>
   );
