@@ -42,7 +42,7 @@ const iconMap = {
 const Categories = ({ }) => {
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             const data = await GetuserData();
@@ -54,19 +54,15 @@ const Categories = ({ }) => {
 
 
     const activeCat = Parameater.get('cat')
-    const FetchSubCategory = async () => {
-        console.log('fetching for:', activeCat)
-        const response = await fetch(`http://localhost:4000/subcategory?cat=${activeCat}`)
-        const subcategoryData = await response.json();
-        setSubCategory(subcategoryData)
-    }
-    console.log(subCategory)
+    const FetchSubCategory = async () => {        
+        const response = await fetch(`http://localhost:4000/subcategory?cat=${activeCat}`);
+        const subcategoryData = await response.json();        
+        setSubCategory(subcategoryData);        
+
+    }   
     useEffect(() => {
         FetchSubCategory();
-    }, [activeCat]);
-    const updateCategory = (newCatValue) => {
-        setSearchParams({ cat: newCatValue });
-    };
+    }, [activeCat]);    
 
     return (
         <div className="p-4">
