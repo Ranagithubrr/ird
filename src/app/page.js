@@ -13,9 +13,11 @@ import { Suspense } from "react";
 export default function Home() {
   const Parameater = useSearchParams();
   const [duaData, setDuaData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);  
+  
 
-  const activeCat = Parameater.get('cat');
+
+  const activeCat = Parameater.get('cat') || 1;
 
   const FetchDuaData = async () => {
     setLoading(true)

@@ -113,7 +113,7 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
                 <div className="absolute w-full px-4 top-36 overflow-y-scroll" style={{ height: '70%' }}>
                     {filteredCategories && filteredCategories.length !== 0 && filteredCategories.map((ele) => (
                         <div key={ele.dua_id}>
-                            <Link href={`https://ird-task-backend.onrender.com/?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
+                            <Link href={`?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
                                 <div className="hover:bg-gray-200 rounded-lg px-4 py-3 my-2 cursor-pointer flex" >
 
                                     <div className="bg-gray-200 rounded p-1 box-border">
