@@ -6,8 +6,22 @@ import { PiLightbulbFilamentLight } from "react-icons/pi";
 import { GoShareAndroid } from "react-icons/go";
 import { MdReportGmailerrorred } from "react-icons/md";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import { useState } from 'react';
+import ReactAudioPlayer from 'react-audio-player';
+import { FaPlay } from "react-icons/fa";
+import { useRef, useState } from 'react';
+import { FaPause } from 'react-icons/fa6';
 const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const audioRef = useRef(null);
+
+    const togglePlay = () => {
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play();
+        }
+        setIsPlaying(!isPlaying);
+    };
     return (
         <div className="relative w-full mt-8 lg:h-[calc(86vh)] rounded-md top-2 overflow-y-scroll scroll-smooth">
             <div className="absolute top-2 left-0 right-0 mx-auto">
@@ -61,14 +75,31 @@ const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {
                                                 <span className="text-green-600 pl-4">{ele.dua_id}. {ele.dua_name_en}</span>
                                             </div>
                                             <div>
-                                                <p className='font-semibold text-gray-600 pr-4 text-justify py-4 leading-8'>{
-                                                    ele.top_en !== null && ele.top_en
-                                                }</p>
-                                                <p className='text-3xl py-3 leading-loose'>
-                                                    {
-                                                        ele.dua_arabic !== null && ele.dua_arabic
-                                                    }
-                                                </p>
+                                                {
+                                                    ele.top_en !== null &&
+                                                    <p className='font-semibold text-gray-600 pr-4 text-justify py-4 leading-8'>{ele.top_en}
+                                                    </p>
+                                                }
+                                                {
+                                                    ele.dua_arabic !== null &&
+                                                    <p className='text-3xl py-3 leading-loose'>
+                                                        {ele.dua_arabic}
+                                                    </p>
+                                                }
+                                            </div>
+                                            <div>
+                                                {
+                                                    ele.translation_en !== null &&
+                                                    <p className='font-semibold text-gray-600 pr-4 text-justify py-4 leading-8'> <i className='font-semibold text-lg'>Translation</i> :  {ele.translation_en}
+                                                    </p>
+                                                }
+                                            </div>
+                                            <div>
+                                                {
+                                                    ele.transliteration_en !== null &&
+                                                    <p className='font-semibold text-gray-600 pr-4 text-justify py-4 leading-8'> <i className='font-semibold text-lg'>Transliteration</i> : {ele.transliteration_en}
+                                                    </p>
+                                                }
                                             </div>
                                             <div className='pt-4'>
                                                 <span className="text-green-600 font-semibold">Reference:</span>
@@ -78,13 +109,30 @@ const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {
                                                     }
                                                 </span>
                                             </div>
-                                            <div className='py-4 pt-8 flex justify-end'>
-                                                <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><LuCopy /></span>
-                                                <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><CiBookmark /></span>
-                                                <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><PiLightbulbFilamentLight /></span>
-                                                <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><GoShareAndroid /></span>
-                                                <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><MdReportGmailerrorred /></span>
+
+                                            <div className="flex items-center justify-between pt-4">
+                                                {ele.audio && (
+                                                    <div>
+                                                        <audio ref={audioRef} src={ele.audio}></audio>
+                                                        <div className="mb-4">
+                                                            <button
+                                                                onClick={togglePlay}
+                                                                className="bg-green-500 text-white font-bold py-4 px-4 rounded-full"
+                                                            >
+                                                                {isPlaying ? <FaPause /> : <FaPlay />}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className='pt-8 flex justify-end'>
+                                                    <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><LuCopy /></span>
+                                                    <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><CiBookmark /></span>
+                                                    <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><PiLightbulbFilamentLight /></span>
+                                                    <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><GoShareAndroid /></span>
+                                                    <span className='cursor-pointer text-2xl text-gray-600 mx-3 inline-block'><MdReportGmailerrorred /></span>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </section>
                                 )
