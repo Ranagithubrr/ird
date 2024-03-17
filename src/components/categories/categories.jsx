@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 const GetuserData = async () => {
     const res = await fetch('https://ird-task-backend.onrender.com/category');
@@ -91,6 +92,7 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
 
     return (
         <div className="p-4">
+            <Suspense fallback={<div>Loading...</div>}>
             <span className="text-2xl">Duas Page</span>
             <div className="relative bg-white mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 bg-green-600 text-white w-full rounded-t-md rounded-e-md py-4 text-center">
@@ -174,6 +176,7 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
                     ))}
                 </div>
             </div>
+            </Suspense>
         </div >
     );
 };
