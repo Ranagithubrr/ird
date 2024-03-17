@@ -84,6 +84,7 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
     }
     useEffect(() => {
         FetchSubCategory();
+        // eslint-disable-next-line
     }, [activeCat, activesubCat]);
     console.log('duas is', duaData);
 
