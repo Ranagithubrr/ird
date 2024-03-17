@@ -51,12 +51,23 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
     const router = useRouter();
     const currentUrl = router.asPath;
     const [loading, setLoading] = useState(true);
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleInputChange = (inputValue) => {
+        setInputValue(inputValue);
+        const filteredCategories = category.filter((cat) =>
+            cat.cat_name_en.toLowerCase().includes(inputValue.toLowerCase())
+        );
+        setFilteredCategories(filteredCategories);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             // setLoading(true);
             const data = await GetuserData();
             setCategory(data);
+            setFilteredCategories(data)
             // setLoading(false);
         };
         fetchData();
@@ -86,7 +97,6 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
     return (
         <div className="p-4">
             <SkeletonTheme baseColor="#202020" highlightColor="#444">
-                <Skeleton />
                 <span className="text-2xl">Duas Page</span>
                 <div className="relative bg-white mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 bg-green-600 text-white w-full rounded-t-md rounded-e-md py-4 text-center">
@@ -95,27 +105,32 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
                     <div className="absolute w-90 w-full px-4 top-16">
                         <div className="border-2 rounded h-14 flex items-center justify-center mt-3 focus-within:border-green-500">
                             <span className="text-2xl text-gray-500 pr-3"><IoIosSearch /></span>
-                            <input type="text" placeholder="Search Categories" className="h-full w-10/12 float-end border-none outline-none" />
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={(e) => handleInputChange(e.target.value)}
+                                placeholder="Search Categories"
+                                className="h-full w-10/12 float-end border-none outline-none"
+                            />
                         </div>
                     </div>
                     <div className="absolute w-full px-4 top-36 overflow-y-scroll" style={{ height: '70%' }}>
-                        {category && category.length !== 0 && category.map((ele) => (
+                        {filteredCategories && filteredCategories.length !== 0 && filteredCategories.map((ele) => (
                             <div key={ele.dua_id}>
                                 <Link href={`http://localhost:3000/?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
                                     <div className="hover:bg-gray-200 rounded-lg px-4 py-3 my-2 cursor-pointer flex" >
-                                        {
-                                            loading ? <Skeleton /> :
-                                                <div className="bg-gray-200 rounded p-1 box-border">
-                                                    {/* Use the icon based on the iconMap */}
 
-                                                    <Image
-                                                        src={iconMap[ele.cat_icon] || dua_gurutto} // Use iconMap for dynamic image selection
-                                                        alt="dua icon"
-                                                        width={30}
-                                                        height={30}
-                                                    />
-                                                </div>
-                                        }                                    
+                                        <div className="bg-gray-200 rounded p-1 box-border">
+                                            {/* Use the icon based on the iconMap */}
+
+                                            <Image
+                                                src={iconMap[ele.cat_icon] || dua_gurutto} // Use iconMap for dynamic image selection
+                                                alt="dua icon"
+                                                width={30}
+                                                height={30}
+                                            />
+                                        </div>
+
                                         <div className="pl-3">
                                             <span className="text-black block">{ele.cat_name_en}</span>
                                             <span className="text-gray-500 block text-xs">Subcategory :{ele.no_of_subcat}</span>
@@ -124,8 +139,8 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
                                 </Link>
                                 {
                                     activeCat == ele.cat_id &&
-                                    <div className="border-dotted border-green-600 border-l-2 pl-4">
-                                        <ul>
+                                    <div className=" pl-4">
+                                        <ul className="ml-4 border-dotted border-green-600 border-l-2 pl-4">
                                             {
                                                 subCategory.map((eletwo, index) => {
                                                     return (<>

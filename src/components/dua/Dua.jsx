@@ -7,11 +7,13 @@ import { GoShareAndroid } from "react-icons/go";
 import { MdReportGmailerrorred } from "react-icons/md";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useState } from 'react';
-const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {    
+const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {
     return (
         <div className="relative w-full mt-8 lg:h-[calc(86vh)] rounded-md top-2 overflow-y-scroll scroll-smooth">
             <div className="absolute top-2 left-0 right-0 mx-auto">
-
+                <div className="bg-white rounded-md  pl-5 py-4">
+                    <span><span className="text-green-600 h-12 font-semibold text-base">Section:</span> {activeSubCategoryTitle}</span>
+                </div>
                 <>
                     {
                         loading ? <div className='mt-5'>
