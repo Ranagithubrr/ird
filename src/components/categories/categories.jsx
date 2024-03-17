@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { IoIosSearch } from "react-icons/io";
+import { FaAngleRight } from "react-icons/fa6";
 
 // Import SVG icons directly (avoid redundant imports and potential naming conflicts)
 import dua_gurutto from '@/img/cat-icons/duar_gurutto.svg';
@@ -15,7 +16,10 @@ import poshak from '@/img/cat-icons/poshak.svg';
 import bari from '@/img/cat-icons/bari.svg';
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { Duru_Sans } from "next/font/google";
+
 
 const GetuserData = async () => {
     const res = await fetch('http://localhost:4000/category');
@@ -42,7 +46,10 @@ const iconMap = {
 const Categories = ({ }) => {
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
-    
+    const [duaData, setDuaData] = useState([]);
+    const router = useRouter();
+    const currentUrl = router.asPath;
+
     useEffect(() => {
         const fetchData = async () => {
             const data = await GetuserData();
@@ -53,21 +60,27 @@ const Categories = ({ }) => {
     const Parameater = useSearchParams()
 
 
-    const activeCat = Parameater.get('cat')
-    const FetchSubCategory = async () => {        
-        const response = await fetch(`http://localhost:4000/subcategory?cat=${activeCat}`);
-        const subcategoryData = await response.json();        
-        setSubCategory(subcategoryData);        
+    const activeCat = Parameater.get('cat');
+    const activesubCat = Parameater.get('subcat');
+    const duaid = Parameater.get('duaid');
 
-    }   
+    const FetchSubCategory = async () => {
+        const response = await fetch(`http://localhost:4000/subcategory?cat=${activeCat}`);
+        const subcategoryData = await response.json();
+        setSubCategory(subcategoryData);
+        // fetching dua's
+        const responsedua = await fetch(`http://localhost:4000/dua-filter?cat=${activeCat}&scat=${activesubCat}`);
+        const duaresdata = await responsedua.json();
+        setDuaData(duaresdata);
+    }
     useEffect(() => {
         FetchSubCategory();
-    }, [activeCat]);    
-
+    }, [activeCat, activesubCat]);
+    console.log('duas is', duaData);
     return (
         <div className="p-4">
             <span className="text-2xl">Duas Page</span>
-            <div className="relative bg-white mt-4 lg:h-[calc(86vh)] rounded-md">
+            <div className="relative bg-white mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden">
                 <div className="absolute top-0 left-0 right-0 bg-green-600 text-white w-full rounded-t-md rounded-e-md py-4 text-center">
                     <span>Categories</span>
                 </div>
@@ -77,9 +90,9 @@ const Categories = ({ }) => {
                         <input type="text" placeholder="Search Categories" className="h-full w-10/12 float-end border-none outline-none" />
                     </div>
                 </div>
-                <div className="absolute w-full px-4 top-36 overflow-y-scroll h-full">
+                <div className="absolute w-full px-4 top-36 overflow-y-scroll" style={{ height: '70%' }}>
                     {category && category.length !== 0 && category.map((ele) => (
-                        <div key={ele.cat_id}>
+                        <div key={ele.dua_id}>
                             <Link href={`http://localhost:3000/?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
                                 <div className="hover:bg-gray-200 rounded-lg px-4 py-3 my-2 cursor-pointer flex" >
                                     <div className="bg-gray-200 rounded p-1 box-border">
@@ -102,11 +115,33 @@ const Categories = ({ }) => {
                                 <div className="border-dotted border-green-600 border-l-2 pl-4">
                                     <ul>
                                         {
-                                            subCategory.map((ele, index) => {
-                                                return (
-                                                    <li key={index} className="text-sm font-semibold py-3 cursor-pointer relative">
-                                                        <div className="h-2 w-2 rounded-full bg-green-600 absolute -ml-[21px] z-10"></div>
-                                                        {ele.subcat_name_en}</li>
+                                            subCategory.map((eletwo, index) => {
+                                                return (<>
+                                                    <Link key={eletwo.dua_id} href={`?cat=${ele.cat_id}&subcat=${eletwo.subcat_id}`}>
+                                                        <li className="text-sm font-semibold py-3 cursor-pointer relative">
+                                                            <div className="h-2 w-2 rounded-full bg-green-600 absolute -ml-[21px] z-10"></div>
+                                                            {eletwo.subcat_name_en}</li>
+                                                    </Link>
+                                                    {
+                                                        activeCat == ele.cat_id && activesubCat == eletwo.subcat_id &&
+
+                                                        <ul className="pl-4">
+                                                            {
+                                                                duaData && duaData.length !== 0 && duaData.map((dua) => {
+                                                                    return (
+                                                                        <li key={dua.dua_is + dua.subcat_id + dua.cat_id} className="text-sm font-semibold py-3 cursor-pointer relative">
+                                                                            <Link href={`#${dua.dua_id}`} spy={true} smooth={true} duration={1000}>
+                                                                                <div className="text-xs flex items-center">
+                                                                                    <span className="text-green-500 pr-2"><FaAngleRight /></span> {dua.dua_name_en}
+                                                                                </div>
+                                                                            </Link>
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </ul >
+                                                    }
+                                                </>
                                                 )
                                             })
                                         }
@@ -118,7 +153,7 @@ const Categories = ({ }) => {
                     ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

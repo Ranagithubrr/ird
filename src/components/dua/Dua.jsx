@@ -8,7 +8,7 @@ import { MdReportGmailerrorred } from "react-icons/md";
 const Dua = ({ duaData }) => {
     console.log('got data:', duaData)
     return (
-        <div className="relative w-full mt-8 lg:h-[calc(86vh)] rounded-md top-2 overflow-y-scroll">
+        <div className="relative w-full mt-8 lg:h-[calc(86vh)] rounded-md top-2 overflow-y-scroll scroll-smooth">
             <div className="absolute top-2 left-0 right-0 mx-auto">
                 <div className="bg-white rounded-md  pl-5 py-4">
                     <span><span className="text-green-600 h-12 font-semibold text-base">Section:</span> The servant is dependent on his Lord</span>
@@ -16,11 +16,11 @@ const Dua = ({ duaData }) => {
                 {
                     duaData && duaData.length !== 0 && duaData.map((ele) => {
                         return (
-                            <section key={ele.id}>
+                            <section key={ele.id} id={ele.dua_id}>
                                 <div className="bg-white rounded-md pl-5 py-4 mt-5">
                                     <div className="flex items-center">
                                         <Image src={DuaCard} width={34} height={34} alt='dua'></Image>
-                                        <span className="text-green-600 pl-4">1. {ele.dua_name_en}</span>
+                                        <span className="text-green-600 pl-4">{ele.dua_id}. {ele.dua_name_en}</span>
                                     </div>
                                     <div>
                                         <p className='font-semibold text-gray-600 pr-4 text-justify py-4 leading-8'>{
