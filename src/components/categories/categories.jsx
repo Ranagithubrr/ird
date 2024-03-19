@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const GetuserData = async () => {
     const res = await fetch('https://ird-task-backend.onrender.com/category');
@@ -40,7 +41,7 @@ const iconMap = {
     'bari': bari
 };
 
-const Categories = ({ setActiveSubCategoryTitle }) => {
+const Categories = ({ setActiveSubCategoryTitle}) => {
     const [category, setCategory] = useState([]);
     const [subCategory, setSubCategory] = useState([]);
     const [duaData, setDuaData] = useState([]);
@@ -50,9 +51,10 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
     const Parameater = useSearchParams()
     let activeCat = Parameater.get('cat');
     let activesubCat = Parameater.get('subcat');
+    const [mobileMenu, setMobileMenu] = useState(false);
 
 
-    const handleInputChange = (inputValue) => {        
+    const handleInputChange = (inputValue) => {
         activeCat = 2;
         setInputValue(inputValue);
         const filteredCategories = category.filter((cat) =>
@@ -91,91 +93,101 @@ const Categories = ({ setActiveSubCategoryTitle }) => {
 
 
     return (
-        <div className="p-4">
+        <div className="lg:p-4">
             <Suspense fallback={<div>Loading...</div>}>
-            <span className="text-2xl">Duas Page</span>
-            <div className="relative bg-white mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 bg-green-600 text-white w-full rounded-t-md rounded-e-md py-4 text-center">
-                    <span>Categories</span>
+                <span className="text-2xl hidden lg:block">Duas Page</span>
+                <div className="lg:hidden fixed top-0 w-screen h-16 bg-white z-30 left-0 right-0 flex items-center justify-between">
+                    <span onClick={() => setMobileMenu((prev) => !prev)} className="pl-5">{
+                        !mobileMenu ? <FaBars /> : <FaTimes />
+                    }</span>
                 </div>
-                <div className="absolute w-90 w-full px-4 top-16">
-                    <div className="border-2 rounded h-14 flex items-center justify-center mt-3 focus-within:border-green-500">
-                        <span className="text-2xl text-gray-500 pr-3"><IoIosSearch /></span>
-                        <input
-                            type="text"
-                            value={inputValue}
-                            onChange={(e) => handleInputChange(e.target.value)}
-                            placeholder="Search Categories"
-                            className="h-full w-10/12 float-end border-none outline-none"
-                        />
+                <div className={`fixed lg:relative w-[100vw] lg:w-auto h-screen z-10 ${!mobileMenu ? 'left-[1000px]' : ''} lg:left-0 transition ease-linear duration-500 bg-white lg:mt-4 h-screen mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden`}>
+                <div className={`w-full lg:w-auto h-screen z-10 ${!mobileMenu ? 'left-[1000px]' : ''} lg:left-0 transition ease-linear duration-500 bg-white lg:mt-4 h-screen mt-4 lg:h-[calc(86vh)] rounded-md overflow-hidden`}>
+                    <div className="absolute top-0 left-0 right-0 bg-green-600 text-white w-full rounded-t-md rounded-e-md py-4 text-center">
+                        <span>Categories</span>
+                    </div>
+                    <div className="absolute w-90 w-full px-4 top-16">
+                        <div className="border-2 rounded h-14 flex items-center justify-center mt-3 focus-within:border-green-500">
+                            <span className="text-2xl text-gray-500 pr-3"><IoIosSearch /></span>
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={(e) => handleInputChange(e.target.value)}
+                                placeholder="Search Categories"
+                                className="h-full w-10/12 float-end border-none outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="absolute w-full px-4 top-36 overflow-y-scroll" style={{ height: '70%' }}>
+                        {filteredCategories && filteredCategories.length !== 0 && filteredCategories.map((ele) => (
+                            <div key={ele.dua_id}>
+                                <Link href={`?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
+                                    <div className="hover:bg-gray-200 rounded-lg px-4 py-3 my-2 cursor-pointer flex" >
+
+                                        <div className="bg-gray-200 rounded p-1 box-border">
+                                            {/* Use the icon based on the iconMap */}
+
+                                            <Image
+                                                src={iconMap[ele.cat_icon] || dua_gurutto} // Use iconMap for dynamic image selection
+                                                alt="dua icon"
+                                                width={30}
+                                                height={30}
+                                            />
+                                        </div>
+
+                                        <div className="pl-3">
+                                            <span className="text-black block">{ele.cat_name_en}</span>
+                                            <span className="text-gray-500 block text-xs">Subcategory :{ele.no_of_subcat}</span>
+                                        </div>
+                                    </div>
+                                </Link>
+                                {
+                                    activeCat == ele.cat_id &&
+                                    <div className=" pl-4">
+                                        <ul className="ml-4 border-dotted border-green-600 border-l-2 pl-4">
+                                            {
+                                                subCategory.map((eletwo, index) => {
+                                                    return (<>
+                                                        <Link key={eletwo.dua_id} href={`?cat=${ele.cat_id}&subcat=${eletwo.subcat_id}`} onClick={() => setActiveSubCategoryTitle(eletwo.subcat_name_en)}>
+                                                            <li className="text-sm font-semibold py-3 cursor-pointer relative">
+                                                                <div className="h-2 w-2 rounded-full bg-green-600 absolute -ml-[21px] z-10"></div>
+                                                                {eletwo.subcat_name_en}</li>
+                                                        </Link>
+                                                        {
+                                                            activeCat == ele.cat_id && activesubCat == eletwo.subcat_id &&
+
+                                                            <ul className="pl-4">
+                                                                {
+                                                                    duaData && duaData.length !== 0 && duaData.map((dua) => {
+                                                                        return (
+                                                                            <li key={dua.dua_is + dua.subcat_id + dua.cat_id} className="text-sm font-semibold py-3 cursor-pointer relative">
+                                                                                <Link href={`#${dua.dua_id}`} spy={true} smooth={true} duration={1000} onClick={() => {
+                                                                                    setActiveSubCategoryTitle(eletwo.subcat_name_en);
+                                                                                    setMobileMenu((prev) => !prev);
+                                                                                }}>
+                                                                                    <div className="text-xs flex items-center">
+                                                                                        <span className="text-green-500 pr-2"><FaAngleRight /></span> {dua.dua_name_en}
+                                                                                    </div>
+                                                                                </Link>
+                                                                            </li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul >
+                                                        }
+                                                    </>
+                                                    )
+                                                })
+                                            }
+                                        </ul>
+                                    </div>
+
+                                }
+                            </div>
+                        ))}
                     </div>
                 </div>
-                <div className="absolute w-full px-4 top-36 overflow-y-scroll" style={{ height: '70%' }}>
-                    {filteredCategories && filteredCategories.length !== 0 && filteredCategories.map((ele) => (
-                        <div key={ele.dua_id}>
-                            <Link href={`?cat=${ele.cat_id}`} onClick={() => FetchSubCategory()}>
-                                <div className="hover:bg-gray-200 rounded-lg px-4 py-3 my-2 cursor-pointer flex" >
-
-                                    <div className="bg-gray-200 rounded p-1 box-border">
-                                        {/* Use the icon based on the iconMap */}
-
-                                        <Image
-                                            src={iconMap[ele.cat_icon] || dua_gurutto} // Use iconMap for dynamic image selection
-                                            alt="dua icon"
-                                            width={30}
-                                            height={30}
-                                        />
-                                    </div>
-
-                                    <div className="pl-3">
-                                        <span className="text-black block">{ele.cat_name_en}</span>
-                                        <span className="text-gray-500 block text-xs">Subcategory :{ele.no_of_subcat}</span>
-                                    </div>
-                                </div>
-                            </Link>
-                            {
-                                activeCat == ele.cat_id &&
-                                <div className=" pl-4">
-                                    <ul className="ml-4 border-dotted border-green-600 border-l-2 pl-4">
-                                        {
-                                            subCategory.map((eletwo, index) => {
-                                                return (<>
-                                                    <Link key={eletwo.dua_id} href={`?cat=${ele.cat_id}&subcat=${eletwo.subcat_id}`} onClick={() => setActiveSubCategoryTitle(eletwo.subcat_name_en)}>
-                                                        <li className="text-sm font-semibold py-3 cursor-pointer relative">
-                                                            <div className="h-2 w-2 rounded-full bg-green-600 absolute -ml-[21px] z-10"></div>
-                                                            {eletwo.subcat_name_en}</li>
-                                                    </Link>
-                                                    {
-                                                        activeCat == ele.cat_id && activesubCat == eletwo.subcat_id &&
-
-                                                        <ul className="pl-4">
-                                                            {
-                                                                duaData && duaData.length !== 0 && duaData.map((dua) => {
-                                                                    return (
-                                                                        <li key={dua.dua_is + dua.subcat_id + dua.cat_id} className="text-sm font-semibold py-3 cursor-pointer relative">
-                                                                            <Link href={`#${dua.dua_id}`} spy={true} smooth={true} duration={1000} onClick={() => setActiveSubCategoryTitle(eletwo.subcat_name_en)}>
-                                                                                <div className="text-xs flex items-center">
-                                                                                    <span className="text-green-500 pr-2"><FaAngleRight /></span> {dua.dua_name_en}
-                                                                                </div>
-                                                                            </Link>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </ul >
-                                                    }
-                                                </>
-                                                )
-                                            })
-                                        }
-                                    </ul>
-                                </div>
-
-                            }
-                        </div>
-                    ))}
                 </div>
-            </div>
             </Suspense>
         </div >
     );

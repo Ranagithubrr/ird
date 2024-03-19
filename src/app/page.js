@@ -13,8 +13,8 @@ import { Suspense } from "react";
 export default function Home() {
   const Parameater = useSearchParams();
   const [duaData, setDuaData] = useState([]);
-  const [loading, setLoading] = useState(false);  
-  
+  const [loading, setLoading] = useState(false);
+
 
 
   const activeCat = Parameater.get('cat') || 1;
@@ -39,18 +39,18 @@ export default function Home() {
   const [activeSubCategoryTitle, setActiveSubCategoryTitle] = useState("The servant is dependent on his Lord");
   console.log(activeSubCategoryTitle)
   return (
-    <SkeletonTheme baseColor="#ffffff" highlightColor="#EBEEF2">
-      <div className="relative grid gap-6 sm-max:overflow-auto xs:flex xs:flex-col xs:gap-0 sm:gap-0 xl:grid-rows-[46px,1fr] 2xl:grid-rows-[46px,1fr] 3xl:grid-rows-[46px,1fr] z-0 xl:grid-cols-[105px,350px,1fr] 2xl:grid-cols-[105px,350px,1fr,270px] 3xl:grid-cols-[105px,350px,1fr,300px] p-6">
+    <SkeletonTheme baseColor="#ffffff" highlightColor="#EBEEF2">      
+      <div className="relative grid lg:gap-6 sm-max:overflow-auto xs:flex xs:flex-col xs:gap-0 sm:gap-0 xl:grid-rows-[46px,1fr] 2xl:grid-rows-[46px,1fr] 3xl:grid-rows-[46px,1fr] z-0 xl:grid-cols-[105px,350px,1fr] 2xl:grid-cols-[105px,350px,1fr,270px] 3xl:grid-cols-[105px,350px,1fr,300px] px-2 lg:p-6">
         <Suspense fallback={<div>Loading...</div>}>
-          <div>
+          <div className="">
             <Sidebar />
           </div>
           <div>
-            <Categories setActiveSubCategoryTitle={setActiveSubCategoryTitle} />
+            <Categories setActiveSubCategoryTitle={setActiveSubCategoryTitle}/>
           </div>
-          <div>
+          <div className="">
             <Navbar />
-            <Dua loading={loading} duaData={duaData} activeSubCategoryTitle={activeSubCategoryTitle} />
+            <Dua loading={loading} duaData={duaData} activeSubCategoryTitle={activeSubCategoryTitle}/>
           </div>
         </Suspense>
       </div>

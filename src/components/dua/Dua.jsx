@@ -23,7 +23,7 @@ const Dua = ({ duaData, activeSubCategoryTitle, loading }) => {
         setIsPlaying(!isPlaying);
     };
     return (
-        <div className="relative w-full mt-8 lg:h-[calc(86vh)] rounded-md top-2 overflow-y-scroll scroll-smooth">
+        <div className="relative w-full lg:mt-8 lg:h-[calc(86vh)] h-screen rounded-md top-[100px] lg:top-2 overflow-y-scroll scroll-smooth">
             <div className="absolute top-2 left-0 right-0 mx-auto">
                 <div className="bg-white rounded-md  pl-5 py-4">
                     <span><span className="text-green-600 h-12 font-semibold text-base">Section:</span> {activeSubCategoryTitle}</span>

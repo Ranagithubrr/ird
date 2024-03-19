@@ -5,7 +5,7 @@ import UserIcon from "@/img/profile.svg";
 import { IoIosSearch } from "react-icons/io";
 const Navbar = () => {
     return (
-        <div className="flex float-end w-full">
+        <div className="lg:flex float-end w-full hidden">
             <div className="border-2 w-5/12 rounded h-14 flex items-center mt-3 focus-within:border-green-500 overflow-hidden bg-white ml-auto">
                 <input type="text" placeholder="Search by Dua Name" className="h-full w-full pl-4 border-none outline-none rounded" />
                 <div className="bg-gray-100 cursor-pointer hover:bg-gray-200 w-16 h-10 border-2 border-white mr-2 rounded-lg flex items-center justify-center text-lg"><IoIosSearch /></div>
