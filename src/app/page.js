@@ -41,9 +41,9 @@ export default function Home() {
   return (
     <SkeletonTheme baseColor="#ffffff" highlightColor="#EBEEF2">
       <div className="bg-green-500 h-screen w-screen fixed flex flex-col z-50 items-center justify-center">
-        <span className="text-white block">This website is relocated at https://ird-beige.vercel.app/</span>
+        <span className="text-white block">This website is relocated at https://ird-seven.vercel.app/</span>
         <span className="text-white block">To continue Please</span>
-        <a href="https://ird-beige.vercel.app/" className="bg-white text-green-500 font-semibold px-4 py-2 rounded mt-4">
+        <a href="https://ird-seven.vercel.app/" className="bg-white text-green-500 font-semibold px-4 py-2 rounded mt-4">
           Click Here
         </a>
       </div>
