@@ -40,13 +40,13 @@ export default function Home() {
   console.log(activeSubCategoryTitle)
   return (
     <SkeletonTheme baseColor="#ffffff" highlightColor="#EBEEF2">
-      <div className="bg-green-500 h-screen w-screen fixed flex flex-col z-50 items-center justify-center">
+      {/* <div className="bg-green-500 h-screen w-screen fixed flex flex-col z-50 items-center justify-center">
         <span className="text-white block">This website is relocated at https://ird-seven.vercel.app/</span>
         <span className="text-white block">To continue Please</span>
         <a href="https://ird-seven.vercel.app/" className="bg-white text-green-500 font-semibold px-4 py-2 rounded mt-4">
           Click Here
         </a>
-      </div>
+      </div> */}
       <div className="relative grid lg:gap-6 sm-max:overflow-auto xs:flex xs:flex-col xs:gap-0 sm:gap-0 xl:grid-rows-[46px,1fr] 2xl:grid-rows-[46px,1fr] 3xl:grid-rows-[46px,1fr] z-0 xl:grid-cols-[105px,350px,1fr] 2xl:grid-cols-[105px,350px,1fr,270px] 3xl:grid-cols-[105px,350px,1fr,300px] px-2 lg:p-6">
         <Suspense fallback={<div>Loading...</div>}>
           <div className="">
